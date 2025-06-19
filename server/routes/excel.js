@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// router.post("/upload", verifyToken, upload.single("file"), uploadExcel);
+router.post("/upload", verifyToken, upload.single("file"), uploadExcel);
 
 router.get("/myuploads", verifyToken, async (req, res) => {
   try {

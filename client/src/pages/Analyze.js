@@ -23,6 +23,7 @@ import Spinner from "../components/Spinner";
 import { toPng } from "html-to-image";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import ThreeDScatterChart from "../components/ThreeDScatterChart";
 
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#8dd1e1", "#a4de6c"];
 
@@ -141,6 +142,21 @@ const Analyze = () => {
             </ResponsiveContainer>
           </div>
         );
+      case "3d-scatter":
+        return (
+          <div>
+            <h3 className="text-lg font-semibold mb-2">3D Scatter Chart: {xAxis} vs {yAxis} vs Z</h3>
+            <ThreeDScatterChart
+              data={chartData.map(d => ({
+                x: d.x || 0,
+                y: d.y || 0,
+                z: d.z || Math.random() * 50 // Use actual z if available, or random for demo
+              }))}
+              width={600}
+              height={400}
+            />
+          </div>
+        );
       case "pie":
       default:
         return (
@@ -180,6 +196,7 @@ const Analyze = () => {
     { type: "line", label: "Line Chart" },
     { type: "3d-bar", label: "3D Bar Chart" },
     { type: "scatter", label: "Scatter Chart" },
+    { type: "3d-scatter", label: "3D Scatter Chart" },
   ];
 
   const saveAnalysis = async () => {
