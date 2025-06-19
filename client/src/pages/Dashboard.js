@@ -26,6 +26,19 @@ const Dashboard = () => {
     fetchUploads();
   }, []);
 
+  // Load from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem("recentActivity");
+    if (saved) {
+      setRecentActivity(JSON.parse(saved));
+    }
+  }, []);
+
+  // Save to localStorage whenever recentActivity changes
+  useEffect(() => {
+    localStorage.setItem("recentActivity", JSON.stringify(recentActivity));
+  }, [recentActivity]);
+
   const totalFiles = uploads.length;
   const excelFiles = uploads.filter(f => f.fileName.endsWith('.xls') || f.fileName.endsWith('.xlsx')).length;
   const csvFiles = uploads.filter(f => f.fileName.endsWith('.csv')).length;
