@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   PieChart,
   Pie,
@@ -11,12 +11,18 @@ import {
   LineChart,
   Line,
   ResponsiveContainer,
-  Label
+  Label,
+  ScatterChart,
+  Scatter,
+  CartesianGrid
 } from "recharts";
 import ChartSelector from "../components/ChartSelector";
 import ThreeDBarChart from "../components/ThreeDBarChart";
 import Layout from "../components/Layout";
 import Spinner from "../components/Spinner";
+import { toPng } from "html-to-image";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#8dd1e1", "#a4de6c"];
 
@@ -29,6 +35,8 @@ const Analyze = () => {
   const [xAxis, setXAxis] = useState("");
   const [yAxis, setYAxis] = useState("");
   const [loading, setLoading] = useState(true);
+
+  const chartRef = useRef(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -60,6 +68,8 @@ const Analyze = () => {
       .map((row) => ({
         name: row[xField],
         value: parseFloat(row[yField]) || 0,
+        x: parseFloat(row[xField]) || 0,
+        y: parseFloat(row[yField]) || 0,
       }))
       .slice(0, 10);
     setChartData(formatted);
@@ -116,6 +126,21 @@ const Analyze = () => {
         );
       case "3d-bar":
         return <ThreeDBarChart data={chartData} xAxis={xAxis} yAxis={yAxis} />;
+      case "scatter":
+        return (
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Scatter Chart: {xAxis} vs {yAxis}</h3>
+            <ResponsiveContainer width="100%" height={300}>
+              <ScatterChart>
+                <CartesianGrid />
+                <XAxis dataKey="x" name={xAxis} />
+                <YAxis dataKey="y" name={yAxis} />
+                <Tooltip />
+                <Scatter data={chartData} fill="#8884d8" />
+              </ScatterChart>
+            </ResponsiveContainer>
+          </div>
+        );
       case "pie":
       default:
         return (
@@ -146,6 +171,7 @@ const Analyze = () => {
     if (uploads.length > 0 && fields.length > 0) {
       formatChartData(uploads[selectedFileIndex].data, xAxis, yAxis);
     }
+    // eslint-disable-next-line
   }, [uploads, fields.length, selectedFileIndex, xAxis, yAxis]);
 
   const chartTypes = [
@@ -153,6 +179,7 @@ const Analyze = () => {
     { type: "bar", label: "Bar Chart" },
     { type: "line", label: "Line Chart" },
     { type: "3d-bar", label: "3D Bar Chart" },
+    { type: "scatter", label: "Scatter Chart" },
   ];
 
   const saveAnalysis = async () => {
@@ -171,6 +198,31 @@ const Analyze = () => {
         yAxis,
       }),
     });
+  };
+
+  // Download as PNG
+  const handleDownloadPNG = () => {
+    if (chartRef.current) {
+      toPng(chartRef.current)
+        .then((dataUrl) => {
+          const link = document.createElement("a");
+          link.download = "chart.png";
+          link.href = dataUrl;
+          link.click();
+        });
+    }
+  };
+
+  // Download as PDF
+  const handleDownloadPDF = () => {
+    if (chartRef.current) {
+      html2canvas(chartRef.current).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF();
+        pdf.addImage(imgData, "PNG", 10, 10, 180, 100);
+        pdf.save("chart.pdf");
+      });
+    }
   };
 
   return (
@@ -219,12 +271,27 @@ const Analyze = () => {
             ))}
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-md">
+          {/* Chart and download buttons */}
+          <div ref={chartRef}>
             {chartData.length === 0 ? (
               <div className="text-center text-gray-500 py-8">No data available for this chart.</div>
             ) : (
               renderChart()
             )}
+          </div>
+          <div className="flex gap-4 mt-4">
+            <button
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              onClick={handleDownloadPNG}
+            >
+              Download Chart as PNG
+            </button>
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              onClick={handleDownloadPDF}
+            >
+              Download Chart as PDF
+            </button>
           </div>
 
           {/* Legend and data table */}
