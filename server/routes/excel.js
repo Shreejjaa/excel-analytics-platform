@@ -59,9 +59,13 @@ router.get("/download/:id", verifyToken, async (req, res) => {
 router.post("/summary/:id", verifyToken, async (req, res) => {
   try {
     const upload = await Upload.findById(req.params.id);
-    if (!upload) return res.status(404).json({ message: "File not found" });
+    if (!upload) {
+      console.error("File not found for summary:", req.params.id);
+      return res.status(404).json({ message: "File not found" });
+    }
 
     const prompt = `Summarize the following Excel data:\n${JSON.stringify(upload.data.slice(0, 20))}`;
+    console.log("Prompt for OpenAI:", prompt);
 
     const response = await axios.post(
       "https://api.openai.com/v1/chat/completions",
@@ -78,9 +82,12 @@ router.post("/summary/:id", verifyToken, async (req, res) => {
       }
     );
 
+    console.log("OpenAI response:", response.data);
+
     const summary = response.data.choices[0].message.content;
     res.json({ summary });
   } catch (err) {
+    console.error("AI summary error:", err.response ? err.response.data : err.message);
     res.status(500).json({ message: "AI summary failed", error: err.message });
   }
 });

@@ -3,12 +3,13 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import Spinner from "./components/Spinner";
 import Settings from "./pages/Settings/Settings";
 import Admin from "./pages/Admin";
+import History from "./pages/History";
 
 // Lazy load your pages/components
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Upload = lazy(() => import("./pages/upload"));
 const Analyze = lazy(() => import("./pages/Analyze"));
-const HistoryList = lazy(() => import("./components/HistoryList"));
+// const HistoryList = lazy(() => import("./components/HistoryList"));
 const Register = lazy(() => import("./pages/register"));
 const Login = lazy(() => import("./pages/login"));
 // Add Settings if you have it
@@ -38,7 +39,7 @@ function App() {
           <Route path="/upload" element={<Upload />} />
           <Route path="/analyze" element={<Analyze />} />
           <Route path="/analyze/:id" element={<Analyze />} />
-          <Route path="/history" element={<HistoryList />} />
+          <Route path="/history" element={<History />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/admin" element={<Admin />} />
         </Routes>

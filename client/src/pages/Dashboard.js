@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { useNavigate } from "react-router-dom";
+import HistoryList from "../components/HistoryList";
+import API_BASE from "../api";
 
 const Dashboard = () => {
   const [uploads, setUploads] = useState([]);
@@ -17,7 +19,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchUploads = async () => {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/excel/myuploads", {
+      const res = await fetch(`${API_BASE}/api/excel/myuploads`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -80,7 +82,7 @@ const Dashboard = () => {
                     className="text-blue-700 hover:underline"
                     onClick={async () => {
                       const token = localStorage.getItem("token");
-                      const res = await fetch(`http://localhost:5000/api/excel/download/${file._id}`, {
+                      const res = await fetch(`${API_BASE}/api/excel/download/${file._id}`, {
                         headers: { Authorization: `Bearer ${token}` }
                       });
                       const blob = await res.blob();
@@ -136,6 +138,7 @@ const Dashboard = () => {
             <div>⭐ <b>Popular Content:</b> None yet</div>
           </section>
         </div>
+        <HistoryList />
       </main>
     </div>
   );

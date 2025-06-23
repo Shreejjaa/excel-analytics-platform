@@ -12,16 +12,13 @@ const uploadExcel = async (req, res) => {
     const ext = req.file.originalname.split('.').pop().toLowerCase();
     let data = [];
 
-    if (ext === "csv") {
-      // Parse CSV
-      const workbook = XLSX.readFile(req.file.path, { type: "file", raw: false });
-      const sheet = workbook.SheetNames[0];
-      data = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
-    } else {
+    if (ext === "csv" || ext === "xlsx" || ext === "xls") {
       // Parse Excel
       const workbook = XLSX.readFile(req.file.path);
       const sheet = workbook.SheetNames[0];
       data = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
+    } else {
+      return res.status(400).json({ message: "Unsupported file type" });
     }
 
     fs.unlinkSync(req.file.path);

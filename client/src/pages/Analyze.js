@@ -24,6 +24,7 @@ import { toPng } from "html-to-image";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import ThreeDScatterChart from "../components/ThreeDScatterChart";
+import AISummary from "../components/AISummary";
 
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#8dd1e1", "#a4de6c"];
 
@@ -217,29 +218,24 @@ const Analyze = () => {
     });
   };
 
-  // Download as PNG
-  const handleDownloadPNG = () => {
-    if (chartRef.current) {
-      toPng(chartRef.current)
-        .then((dataUrl) => {
-          const link = document.createElement("a");
-          link.download = "chart.png";
-          link.href = dataUrl;
-          link.click();
-        });
-    }
+  const downloadChartAsPDF = () => {
+    const chart = document.getElementById("chart-container");
+    html2canvas(chart).then(canvas => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF();
+      pdf.addImage(imgData, "PNG", 10, 10, 180, 100);
+      pdf.save("chart.pdf");
+    });
   };
 
-  // Download as PDF
-  const handleDownloadPDF = () => {
-    if (chartRef.current) {
-      html2canvas(chartRef.current).then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jsPDF();
-        pdf.addImage(imgData, "PNG", 10, 10, 180, 100);
-        pdf.save("chart.pdf");
-      });
-    }
+  const downloadChartAsPng = () => {
+    const chart = document.getElementById('chart-container');
+    toPng(chart).then((dataUrl) => {
+      const link = document.createElement('a');
+      link.download = 'chart.png';
+      link.href = dataUrl;
+      link.click();
+    });
   };
 
   return (
@@ -289,7 +285,7 @@ const Analyze = () => {
           </div>
 
           {/* Chart and download buttons */}
-          <div ref={chartRef}>
+          <div ref={chartRef} id="chart-container">
             {chartData.length === 0 ? (
               <div className="text-center text-gray-500 py-8">No data available for this chart.</div>
             ) : (
@@ -299,13 +295,13 @@ const Analyze = () => {
           <div className="flex gap-4 mt-4">
             <button
               className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-              onClick={handleDownloadPNG}
+              onClick={downloadChartAsPng}
             >
               Download Chart as PNG
             </button>
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              onClick={handleDownloadPDF}
+              onClick={downloadChartAsPDF}
             >
               Download Chart as PDF
             </button>
@@ -336,6 +332,7 @@ const Analyze = () => {
               </table>
             </div>
           </div>
+          <AISummary uploadId={uploads[selectedFileIndex]._id} />
         </>
       ) : (
         <p>No uploads found. Please upload a file first.</p>

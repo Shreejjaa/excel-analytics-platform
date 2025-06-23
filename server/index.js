@@ -1,7 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-require("dotenv").config();
+const path = require("path");
+require("dotenv").config({ path: path.join(__dirname, '.env') });
+
+// Debug: Check if environment variables are loaded
+console.log("🔍 Debug - MONGO_URI:", process.env.MONGO_URI);
+console.log("🔍 Debug - PORT:", process.env.PORT);
 
 const app = express();
 app.use(cors());

@@ -3,10 +3,12 @@ import { ToastContainer, toast } from "react-toastify";
 import Spinner from "../components/Spinner";
 import Layout from "../components/Layout";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 const Upload = () => {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const navigate = useNavigate();
 
   const handleFileChange = (e) => setFile(e.target.files[0]);
 
@@ -31,6 +33,9 @@ const Upload = () => {
       if (res.ok) {
         toast.success("Upload successful!");
         setFile(null);
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1000);
       } else {
         toast.error(`Upload failed: ${data.message}`);
       }
