@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { useNavigate } from "react-router-dom";
+<<<<<<< HEAD
 import HistoryList from "../components/HistoryList";
 import API_BASE from "../api";
 import AdminPanel from "../components/AdminPanel";
 import axios from "axios";
+=======
+>>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
 
 const Dashboard = () => {
   const [uploads, setUploads] = useState([]);
   const [recentActivity, setRecentActivity] = useState([]);
   const navigate = useNavigate();
+<<<<<<< HEAD
   const user = JSON.parse(localStorage.getItem("user"));
+=======
+>>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -22,7 +28,11 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchUploads = async () => {
       const token = localStorage.getItem("token");
+<<<<<<< HEAD
       const res = await fetch(`${API_BASE}/api/excel/myuploads`, {
+=======
+      const res = await fetch("http://localhost:5000/api/excel/myuploads", {
+>>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -49,11 +59,16 @@ const Dashboard = () => {
   const csvFiles = uploads.filter(f => f.fileName.endsWith('.csv')).length;
   const avgRows = uploads.length ? Math.round(uploads.reduce((sum, f) => sum + (f.data?.length || 0), 0) / uploads.length) : 0;
 
+<<<<<<< HEAD
   const logActivity = (icon, text, activityType = 'other', details = '') => {
+=======
+  const logActivity = (icon, text) => {
+>>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
     setRecentActivity(prev => [
       { icon, text, time: new Date().toLocaleString() },
       ...prev.slice(0, 9)
     ]);
+<<<<<<< HEAD
     // Save to backend
     const token = localStorage.getItem("token");
     if (token) {
@@ -64,6 +79,8 @@ const Dashboard = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
     }
+=======
+>>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
   };
 
   return (
@@ -85,7 +102,11 @@ const Dashboard = () => {
                   <button
                     className="text-green-700 hover:underline"
                     onClick={() => {
+<<<<<<< HEAD
                       logActivity("👁️", `Viewed ${file.fileName}`, 'view');
+=======
+                      logActivity("👁️", `Viewed ${file.fileName}`);
+>>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
                       window.location.href = `/analyze/${file._id}`;
                     }}
                   >
@@ -95,7 +116,11 @@ const Dashboard = () => {
                     className="text-blue-700 hover:underline"
                     onClick={async () => {
                       const token = localStorage.getItem("token");
+<<<<<<< HEAD
                       const res = await fetch(`${API_BASE}/api/excel/download/${file._id}`, {
+=======
+                      const res = await fetch(`http://localhost:5000/api/excel/download/${file._id}`, {
+>>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
                         headers: { Authorization: `Bearer ${token}` }
                       });
                       const blob = await res.blob();
@@ -109,11 +134,16 @@ const Dashboard = () => {
                       a.href = url;
                       a.click();
                       window.URL.revokeObjectURL(url);
+<<<<<<< HEAD
                       logActivity("⬇️", `Downloaded ${file.fileName}`, 'download');
+=======
+                      logActivity("⬇️", `Downloaded ${file.fileName}`);
+>>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
                     }}
                   >
                     Download
                   </button>
+<<<<<<< HEAD
                   <button
                     className="text-red-700 hover:underline"
                     onClick={async () => {
@@ -128,6 +158,8 @@ const Dashboard = () => {
                   >
                     Delete
                   </button>
+=======
+>>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
                 </div>
               </div>
             ))}
@@ -165,10 +197,13 @@ const Dashboard = () => {
             <div>⭐ <b>Popular Content:</b> None yet</div>
           </section>
         </div>
+<<<<<<< HEAD
         <HistoryList />
         {user && user.role === 'admin' && (
           <AdminPanel />
         )}
+=======
+>>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
       </main>
     </div>
   );

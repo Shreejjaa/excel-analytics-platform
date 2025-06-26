@@ -24,6 +24,7 @@ const isAdmin = (req, res, next) => {
   }
 };
 
+<<<<<<< HEAD
 const adminOnly = (req, res, next) => {
   if (req.user && req.user.role === 'admin') {
     next();
@@ -33,3 +34,6 @@ const adminOnly = (req, res, next) => {
 };
 
 module.exports = { verifyToken, isAdmin, adminOnly };
+=======
+module.exports = { verifyToken, isAdmin };
+>>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect } from 'react';
 import axios from "axios";
 
@@ -13,6 +14,11 @@ const ChartSelector = ({ fields, xAxis, yAxis, setXAxis, setYAxis }) => {
     });
   }, []);
 
+=======
+import React from "react";
+
+const ChartSelector = ({ fields, xAxis, yAxis, setXAxis, setYAxis }) => {
+>>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
   return (
     <div className="mb-4 flex gap-4">
       <div className="flex flex-col">

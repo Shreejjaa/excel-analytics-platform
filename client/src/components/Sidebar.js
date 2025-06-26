@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -28,6 +29,14 @@ const Sidebar = () => {
     fetchUnread();
   }, [location]);
 
+=======
+import React from "react";
+import { Link } from "react-router-dom";
+
+const Sidebar = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const username = user?.name || "User";
+>>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
   return (
     <aside className="bg-green-700 dark:bg-gray-800 text-white w-64 min-h-screen flex flex-col justify-between py-6 px-4">
       <div>
@@ -37,6 +46,7 @@ const Sidebar = () => {
           <Link to="/upload" className="hover:underline">Upload Files</Link>
           <Link to="/analyze" className="hover:underline">Analyze Data</Link>
           <Link to="/history" className="hover:underline">History List</Link>
+<<<<<<< HEAD
           <Link to="/notifications" className="hover:underline flex items-center gap-2 relative">
             Notifications
             {unreadCount > 0 && (
@@ -45,10 +55,13 @@ const Sidebar = () => {
               </span>
             )}
           </Link>
+=======
+>>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
           <Link to="/settings" className="hover:underline">Settings</Link>
         </nav>
       </div>
       <div className="mb-2">
+<<<<<<< HEAD
         <div className="flex items-center mb-2">
           {profilePicture ? (
             <img 
@@ -68,6 +81,11 @@ const Sidebar = () => {
         </div>
         <button
           className="text-red-300 hover:underline text-sm"
+=======
+        <div className="mb-1">{username} <span className="text-xs bg-white text-green-700 px-2 py-0.5 rounded ml-2">user</span></div>
+        <button
+          className="text-red-300 hover:underline"
+>>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
           onClick={() => {
             localStorage.removeItem("token");
             localStorage.removeItem("user");
