@@ -39,7 +39,6 @@ const ThreeDScatterChart = ({ data, width = 600, height = 400 }) => {
     const backgroundColor = isDark ? 0x18181b : 0xf0f4f8;
     const gridColor = isDark ? 0x333347 : 0xcccccc;
     const gridColor2 = isDark ? 0x22222a : 0xeeeeee;
-    const axisLabelColor = isDark ? "#fff" : "#333";
     const axesColors = isDark
       ? [0xff5555, 0x55ff55, 0x5555ff]
       : [0xff0000, 0x00ff00, 0x0000ff];
