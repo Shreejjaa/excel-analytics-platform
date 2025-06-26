@@ -1,8 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const cors = require("cors");
-<<<<<<< HEAD
-const path = require("path");
+const cors = require("cors");const path = require("path");
 const session = require("express-session");
 const passport = require("passport");
 require("dotenv").config({ path: path.join(__dirname, '.env') });
@@ -47,7 +45,6 @@ app.use(express.json());
 const authRoutes = require("./routes/auth");
 const excelRoutes = require("./routes/excel");
 const adminRoutes = require("./routes/admin");
-<<<<<<< HEAD
 const notificationsRoutes = require("./routes/notifications");
 =======
 >>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
@@ -55,7 +52,7 @@ const notificationsRoutes = require("./routes/notifications");
 app.use("/api/auth", authRoutes);
 app.use("/api/excel", excelRoutes);
 app.use("/api/admin", adminRoutes);
-<<<<<<< HEAD
+<
 app.use("/api/notifications", notificationsRoutes);
 =======
 >>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
