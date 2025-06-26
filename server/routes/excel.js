@@ -2,19 +2,21 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const { verifyToken } = require("../middleware/authMiddleware");
-const { uploadExcel } = require("../controllers/excelController");
+const { uploadExcel, saveHistory, getHistory, downloadAnalysis, getAISummary, getExcelData, deleteUpload } = require("../controllers/excelController");
 const Upload = require("../models/upload");
 const path = require("path");
 const fs = require("fs");
 const axios = require("axios");
 const XLSX = require("xlsx");
+const ExcelData = require('../models/ExcelData');
+const { auth } = require('../middleware/authMiddleware');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "./uploads"),
   filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname),
 });
 
-const upload = multer({ storage });
+const upload = multer({ dest: 'uploads/' });
 
 router.post("/upload", verifyToken, upload.single("file"), uploadExcel);
 
@@ -92,7 +94,18 @@ router.post("/summary/:id", verifyToken, async (req, res) => {
   }
 });
 
+router.post('/history', verifyToken, saveHistory);
+router.get('/history', verifyToken, getHistory);
+
+router.post('/download', verifyToken, downloadAnalysis);
+
+router.post('/ai-summary', verifyToken, getAISummary);
+
 // router.post("/save-analysis", verifyToken, saveAnalysis);
 // router.get("/history", verifyToken, getUserHistory);
+
+router.get('/data', verifyToken, getExcelData);
+
+router.delete("/upload/:id", verifyToken, deleteUpload);
 
 module.exports = router;

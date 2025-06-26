@@ -4,15 +4,16 @@ import Spinner from "../components/Spinner";
 import Layout from "../components/Layout";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 const Upload = () => {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const navigate = useNavigate();
 
-  const handleFileChange = (e) => setFile(e.target.files[0]);
+  const handleChange = (e) => setFile(e.target.files[0]);
 
-  const handleUpload = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!file) return toast.error("Please select a file.");
 
@@ -24,23 +25,21 @@ const Upload = () => {
 
     try {
       setUploading(true);
-      const res = await fetch("http://localhost:5000/api/excel/upload", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
+      const res = await axios.post("/api/excel/upload", formData, {
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
       });
-      const data = await res.json();
-      if (res.ok) {
+      if (res.data.message) {
+        toast.error(res.data.message);
+      } else {
         toast.success("Upload successful!");
         setFile(null);
         setTimeout(() => {
           navigate("/dashboard");
         }, 1000);
-      } else {
-        toast.error(`Upload failed: ${data.message}`);
       }
-    } catch {
-      toast.error("Something went wrong during upload.");
+    } catch (err) {
+      const msg = err.response?.data?.message || "Something went wrong during upload.";
+      toast.error(msg);
     } finally {
       setUploading(false);
     }
@@ -50,11 +49,11 @@ const Upload = () => {
     <Layout>
       <div className="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-md mx-auto text-center">
         <h2 className="text-2xl font-bold mb-6 text-green-600">📤 Upload Excel File</h2>
-        <form onSubmit={handleUpload} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="file"
             accept=".xlsx, .xls, .csv"
-            onChange={handleFileChange}
+            onChange={handleChange}
             className="w-full border border-gray-300 rounded-xl px-4 py-2"
             disabled={uploading}
           />

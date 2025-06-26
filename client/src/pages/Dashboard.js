@@ -3,11 +3,14 @@ import Sidebar from "../components/Sidebar";
 import { useNavigate } from "react-router-dom";
 import HistoryList from "../components/HistoryList";
 import API_BASE from "../api";
+import AdminPanel from "../components/AdminPanel";
+import axios from "axios";
 
 const Dashboard = () => {
   const [uploads, setUploads] = useState([]);
   const [recentActivity, setRecentActivity] = useState([]);
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -46,11 +49,21 @@ const Dashboard = () => {
   const csvFiles = uploads.filter(f => f.fileName.endsWith('.csv')).length;
   const avgRows = uploads.length ? Math.round(uploads.reduce((sum, f) => sum + (f.data?.length || 0), 0) / uploads.length) : 0;
 
-  const logActivity = (icon, text) => {
+  const logActivity = (icon, text, activityType = 'other', details = '') => {
     setRecentActivity(prev => [
       { icon, text, time: new Date().toLocaleString() },
       ...prev.slice(0, 9)
     ]);
+    // Save to backend
+    const token = localStorage.getItem("token");
+    if (token) {
+      axios.post("/api/excel/history", {
+        activityType,
+        details: text + (details ? (" - " + details) : "")
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+    }
   };
 
   return (
@@ -72,7 +85,7 @@ const Dashboard = () => {
                   <button
                     className="text-green-700 hover:underline"
                     onClick={() => {
-                      logActivity("👁️", `Viewed ${file.fileName}`);
+                      logActivity("👁️", `Viewed ${file.fileName}`, 'view');
                       window.location.href = `/analyze/${file._id}`;
                     }}
                   >
@@ -96,10 +109,24 @@ const Dashboard = () => {
                       a.href = url;
                       a.click();
                       window.URL.revokeObjectURL(url);
-                      logActivity("⬇️", `Downloaded ${file.fileName}`);
+                      logActivity("⬇️", `Downloaded ${file.fileName}`, 'download');
                     }}
                   >
                     Download
+                  </button>
+                  <button
+                    className="text-red-700 hover:underline"
+                    onClick={async () => {
+                      const token = localStorage.getItem("token");
+                      await fetch(`${API_BASE}/api/excel/upload/${file._id}`, {
+                        method: "DELETE",
+                        headers: { Authorization: `Bearer ${token}` }
+                      });
+                      // Refresh the uploads list after deletion
+                      setUploads(uploads.filter(u => u._id !== file._id));
+                    }}
+                  >
+                    Delete
                   </button>
                 </div>
               </div>
@@ -139,6 +166,9 @@ const Dashboard = () => {
           </section>
         </div>
         <HistoryList />
+        {user && user.role === 'admin' && (
+          <AdminPanel />
+        )}
       </main>
     </div>
   );

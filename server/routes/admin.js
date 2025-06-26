@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { verifyToken, isAdmin } = require("../middleware/authMiddleware");
+const { verifyToken, isAdmin, adminOnly } = require("../middleware/authMiddleware");
 const User = require("../models/User");
 
 // Get all users (admin only)
@@ -14,5 +14,7 @@ router.delete("/users/:id", verifyToken, isAdmin, async (req, res) => {
   await User.findByIdAndDelete(req.params.id);
   res.json({ message: "User deleted" });
 });
+
+router.get('/dashboard', verifyToken, adminOnly, (req, res) => { /* ... */ });
 
 module.exports = router;

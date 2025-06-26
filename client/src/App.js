@@ -12,12 +12,18 @@ const Analyze = lazy(() => import("./pages/Analyze"));
 // const HistoryList = lazy(() => import("./components/HistoryList"));
 const Register = lazy(() => import("./pages/register"));
 const Login = lazy(() => import("./pages/login"));
+const Notifications = lazy(() => import("./pages/Notifications"));
 // Add Settings if you have it
 // const Settings = lazy(() => import("./pages/Settings"));
 
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem("token");
   return token ? children : <Navigate to="/login" />;
+};
+
+// Auth Success Component for Google OAuth
+const AuthSuccess = () => {
+  return <Navigate to="/dashboard" />;
 };
 
 function App() {
@@ -35,6 +41,7 @@ function App() {
           />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/auth-success" element={<AuthSuccess />} />
           <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
           <Route path="/upload" element={<Upload />} />
           <Route path="/analyze" element={<Analyze />} />
@@ -42,6 +49,7 @@ function App() {
           <Route path="/history" element={<History />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/notifications" element={<PrivateRoute><Notifications /></PrivateRoute>} />
         </Routes>
       </Suspense>
     </Router>

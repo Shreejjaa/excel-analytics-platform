@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import {
   PieChart,
   Pie,
@@ -25,6 +25,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import ThreeDScatterChart from "../components/ThreeDScatterChart";
 import AISummary from "../components/AISummary";
+import axios from "axios";
 
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#8dd1e1", "#a4de6c"];
 
@@ -39,6 +40,34 @@ const Analyze = () => {
   const [loading, setLoading] = useState(true);
 
   const chartRef = useRef(null);
+
+  const formatChartData = useCallback((fileData, xField, yField) => {
+    if (!fileData || fileData.length === 0) return;
+    const formatted = fileData
+      .map((row) => ({
+        name: row[xField],
+        value: parseFloat(row[yField]) || 0,
+        x: parseFloat(row[xField]) || 0,
+        y: parseFloat(row[yField]) || 0,
+      }))
+      .slice(0, 10);
+    setChartData(formatted);
+  }, []);
+
+  const saveHistory = async (analysis) => {
+    const token = localStorage.getItem("token");
+    try {
+      await axios.post('/api/excel/history', {
+        activityType: 'analyze',
+        details: `Analyzed file: ${analysis.fileName}`,
+        analysis
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+    } catch (err) {
+      console.error("Failed to save history", err);
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -58,24 +87,18 @@ const Analyze = () => {
             setXAxis(keys[0]);
             setYAxis(keys[1]);
             formatChartData(sample, keys[0], keys[1]);
+            saveHistory({
+              fileName: uploads[0].fileName,
+              chartType: selectedChart,
+              xAxis: keys[0],
+              yAxis: keys[1],
+              data: sample
+            });
           }
         }
       })
       .finally(() => setLoading(false));
-  }, []);
-
-  const formatChartData = (fileData, xField, yField) => {
-    if (!fileData || fileData.length === 0) return;
-    const formatted = fileData
-      .map((row) => ({
-        name: row[xField],
-        value: parseFloat(row[yField]) || 0,
-        x: parseFloat(row[xField]) || 0,
-        y: parseFloat(row[yField]) || 0,
-      }))
-      .slice(0, 10);
-    setChartData(formatted);
-  };
+  }, [formatChartData, selectedChart]);
 
   const handleFileChange = (e) => {
     const index = parseInt(e.target.value);
@@ -86,6 +109,13 @@ const Analyze = () => {
     setXAxis(keys[0]);
     setYAxis(keys[1]);
     formatChartData(selected.data, keys[0], keys[1]);
+    saveHistory({
+      fileName: selected.fileName,
+      chartType: selectedChart,
+      xAxis: keys[0],
+      yAxis: keys[1],
+      data: selected.data
+    });
   };
 
   const renderChart = () => {
@@ -216,6 +246,7 @@ const Analyze = () => {
         yAxis,
       }),
     });
+    saveHistory({ fileName: uploads[selectedFileIndex].fileName, chartType: selectedChart, xAxis: xAxis, yAxis: yAxis, data: chartData });
   };
 
   const downloadChartAsPDF = () => {
@@ -240,7 +271,7 @@ const Analyze = () => {
 
   return (
     <Layout>
-      <h2 className="text-2xl font-bold mb-4">📊 Analyze Uploaded Excel Data</h2>
+      <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">📊 Analyze Uploaded Excel Data</h2>
       {loading ? (
         <Spinner />
       ) : uploads.length > 0 ? (
@@ -311,28 +342,48 @@ const Analyze = () => {
           <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4">
             <div>
               <span className="inline-block w-4 h-4 rounded mr-2" style={{ background: "#4f8a8b" }}></span>
-              <span>Bar Value</span>
+              <span className="text-gray-900 dark:text-gray-100">Bar Value</span>
             </div>
-            <div className="overflow-x-auto">
-              <table className="min-w-max text-sm">
+            <div className="overflow-x-auto w-full">
+              {/* Chart topic/title above the table */}
+              <div className="mb-2 text-lg font-semibold text-gray-900 dark:text-gray-100 text-center">
+                {(() => {
+                  switch (selectedChart) {
+                    case "bar":
+                      return `Bar Chart: ${xAxis} vs ${yAxis}`;
+                    case "line":
+                      return `Line Chart: ${xAxis} vs ${yAxis}`;
+                    case "3d-bar":
+                      return `3D Bar Chart: ${xAxis} vs ${yAxis}`;
+                    case "scatter":
+                      return `Scatter Chart: ${xAxis} vs ${yAxis}`;
+                    case "3d-scatter":
+                      return `3D Scatter Chart: ${xAxis} vs ${yAxis} vs Z`;
+                    case "pie":
+                    default:
+                      return `Pie Chart: ${xAxis} vs ${yAxis}`;
+                  }
+                })()}
+              </div>
+              <table className="min-w-max text-sm bg-white dark:bg-gray-900 rounded shadow">
                 <thead>
                   <tr>
-                    <th className="px-2 py-1 border">{xAxis}</th>
-                    <th className="px-2 py-1 border">{yAxis}</th>
+                    <th className="px-2 py-1 border text-gray-900 dark:text-gray-100">{xAxis}</th>
+                    <th className="px-2 py-1 border text-gray-900 dark:text-gray-100">{yAxis}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {chartData.map((item, i) => (
                     <tr key={i}>
-                      <td className="px-2 py-1 border">{item.name}</td>
-                      <td className="px-2 py-1 border">{item.value}</td>
+                      <td className="px-2 py-1 border text-gray-900 dark:text-gray-100">{item.name}</td>
+                      <td className="px-2 py-1 border text-gray-900 dark:text-gray-100">{item.value}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           </div>
-          <AISummary uploadId={uploads[selectedFileIndex]._id} />
+          <AISummary analysis={uploads[selectedFileIndex]?.data} buttonClassName="text-gray-900 dark:text-gray-100" />
         </>
       ) : (
         <p>No uploads found. Please upload a file first.</p>

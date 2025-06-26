@@ -1,6 +1,18 @@
-import React from "react";
+import React, { useEffect } from 'react';
+import axios from "axios";
 
 const ChartSelector = ({ fields, xAxis, yAxis, setXAxis, setYAxis }) => {
+  // const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    axios.get('/api/excel/data', {
+      headers: { Authorization: `Bearer ${token}` }
+    }).then(res => {
+      // setData(res.data);
+    });
+  }, []);
+
   return (
     <div className="mb-4 flex gap-4">
       <div className="flex flex-col">
