@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const cors = require("cors");const path = require("path");
+const cors = require("cors");
+const path = require("path");
 const session = require("express-session");
 const passport = require("passport");
 require("dotenv").config({ path: path.join(__dirname, '.env') });
@@ -33,29 +34,17 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
-=======
-require("dotenv").config();
-
-const app = express();
-app.use(cors());
-app.use(express.json());
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
 
 // Routes
 const authRoutes = require("./routes/auth");
 const excelRoutes = require("./routes/excel");
 const adminRoutes = require("./routes/admin");
 const notificationsRoutes = require("./routes/notifications");
-=======
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
 
 app.use("/api/auth", authRoutes);
 app.use("/api/excel", excelRoutes);
 app.use("/api/admin", adminRoutes);
-<
 app.use("/api/notifications", notificationsRoutes);
-=======
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
 
 app.get("/", (req, res) => {
   res.send("📡 API is running");
