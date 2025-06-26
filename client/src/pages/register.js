@@ -37,13 +37,10 @@ const Register = () => {
     }
   };
 
-<<<<<<< HEAD
   const handleGoogleLogin = () => {
     window.location.href = "http://localhost:5000/api/auth/google";
   };
 
-=======
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
   return (
     <div className="min-h-screen flex">
       {/* Left: Welcome Section */}
@@ -88,7 +85,6 @@ const Register = () => {
           />
           <button
             type="submit"
-<<<<<<< HEAD
             className="w-full bg-pink-600 text-white py-2 rounded-lg font-semibold hover:bg-pink-700 transition mb-4"
           >
             Register
@@ -115,12 +111,6 @@ const Register = () => {
             </svg>
             Continue with Google
           </button>
-=======
-            className="w-full bg-pink-600 text-white py-2 rounded-lg font-semibold hover:bg-pink-700 transition"
-          >
-            Register
-          </button>
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
         </form>
       </div>
     </div>

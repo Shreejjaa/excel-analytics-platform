@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from "react";
-<<<<<<< HEAD
 import { Link, useNavigate, useLocation } from "react-router-dom";
-=======
-import { Link, useNavigate } from "react-router-dom";
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-<<<<<<< HEAD
   const location = useLocation();
-=======
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -22,7 +15,6 @@ const Login = () => {
     }
   }, [navigate]);
 
-<<<<<<< HEAD
   // Handle Google OAuth success redirect
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -43,8 +35,6 @@ const Login = () => {
     }
   }, [location, navigate]);
 
-=======
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
@@ -60,11 +50,7 @@ const Login = () => {
 
       if (res.ok) {
         localStorage.setItem("token", data.token);
-<<<<<<< HEAD
         localStorage.setItem("user", JSON.stringify(data.user));
-=======
-        localStorage.setItem("user", JSON.stringify({ name: data.user.name, email: data.user.email }));
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
         alert("✅ Login successful!");
         navigate("/dashboard");
       } else {
@@ -76,13 +62,10 @@ const Login = () => {
     }
   };
 
-<<<<<<< HEAD
   const handleGoogleLogin = () => {
     window.location.href = "http://localhost:5000/api/auth/google";
   };
 
-=======
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
   return (
     <div className="flex h-screen">
       {/* Left Section */}
@@ -129,16 +112,11 @@ const Login = () => {
 
           <button
             type="submit"
-<<<<<<< HEAD
             className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition mb-4"
-=======
-            className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition"
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
           >
             Login
           </button>
 
-<<<<<<< HEAD
           {/* Divider */}
           <div className="flex items-center mb-4">
             <div className="flex-1 border-t border-gray-300"></div>
@@ -161,8 +139,6 @@ const Login = () => {
             Continue with Google
           </button>
 
-=======
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
           <p className="text-xs text-center mt-4 text-gray-600">
             Forgot your password? Contact the admin team.
           </p>
