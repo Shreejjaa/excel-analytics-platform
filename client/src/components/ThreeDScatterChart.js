@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from "react";
 import * as THREE from "three";
-<<<<<<< HEAD
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 const AXIS_LABELS = [
@@ -25,14 +24,11 @@ function createTextSprite(text, color = "#333", fontSize = 48) {
   sprite.scale.set(canvas.width / 10, canvas.height / 10, 1);
   return sprite;
 }
-=======
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
 
 const ThreeDScatterChart = ({ data, width = 600, height = 400 }) => {
   const mountRef = useRef(null);
 
   useEffect(() => {
-<<<<<<< HEAD
     // Detect dark mode
     const isDark =
       (typeof window !== "undefined" &&
@@ -135,55 +131,19 @@ const ThreeDScatterChart = ({ data, width = 600, height = 400 }) => {
       controls.update();
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
-=======
-    const mountNode = mountRef.current;
-
-    // Scene setup
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    camera.position.z = 100;
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(width, height);
-    mountNode.appendChild(renderer.domElement);
-
-    // Axes helper
-    const axesHelper = new THREE.AxesHelper(50);
-    scene.add(axesHelper);
-
-    // Add points
-    data.forEach(point => {
-      const geometry = new THREE.SphereGeometry(1.5, 16, 16);
-      const material = new THREE.MeshBasicMaterial({ color: 0x8884d8 });
-      const sphere = new THREE.Mesh(geometry, material);
-      sphere.position.set(point.x, point.y, point.z || 0);
-      scene.add(sphere);
-    });
-
-    // Animation loop
-    const animate = function () {
-      requestAnimationFrame(animate);
-      renderer.render(scene, camera);
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
     };
     animate();
 
     // Cleanup
     return () => {
-<<<<<<< HEAD
       renderer.dispose();
       controls.dispose();
       while (mountNode && mountNode.firstChild) {
         mountNode.removeChild(mountNode.firstChild);
-=======
-      if (mountNode && renderer.domElement.parentNode === mountNode) {
-        mountNode.removeChild(renderer.domElement);
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
       }
     };
   }, [data, width, height]);
 
-<<<<<<< HEAD
   // Set background for container as well
   const isDark =
     (typeof window !== "undefined" &&
@@ -203,9 +163,6 @@ const ThreeDScatterChart = ({ data, width = 600, height = 400 }) => {
       role="img"
     />
   );
-=======
-  return <div ref={mountRef} />;
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
 };
 
 export default ThreeDScatterChart;

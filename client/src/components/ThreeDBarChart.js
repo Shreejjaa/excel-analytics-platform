@@ -20,8 +20,7 @@ function createTextSprite(text, color = "#333", fontSize = 32) {
   return sprite;
 }
 
-<<<<<<< HEAD
-const ThreeDBarChart = ({ data, xAxis, yAxis, zAxis }) => {
+const ThreeDBarChart = ({ data, xAxis, yAxis }) => {
   const mountRef = useRef(null);
 
   useEffect(() => {
@@ -37,12 +36,6 @@ const ThreeDBarChart = ({ data, xAxis, yAxis, zAxis }) => {
     const gridColor2 = isDark ? 0x22222a : 0xeeeeee;
     const axisLabelColor = isDark ? "#fff" : "#4f8a8b";
 
-=======
-const ThreeDBarChart = ({ data, xAxis, yAxis }) => {
-  const mountRef = useRef(null);
-
-  useEffect(() => {
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
     // Clean up previous scene
     while (mountRef.current && mountRef.current.firstChild) {
       mountRef.current.removeChild(mountRef.current.firstChild);
@@ -52,21 +45,13 @@ const ThreeDBarChart = ({ data, xAxis, yAxis }) => {
     const width = 500;
     const height = 350;
     const scene = new THREE.Scene();
-<<<<<<< HEAD
     scene.background = new THREE.Color(backgroundColor);
-=======
-    scene.background = new THREE.Color(0xf0f4f8); // Light background
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
     const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
     camera.position.set(0, 18, 32);
     camera.lookAt(0, 7, 0);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-<<<<<<< HEAD
     renderer.setClearColor(backgroundColor, 1);
-=======
-    renderer.setClearColor(0xf0f4f8, 1); // Light background
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
     renderer.setSize(width, height);
     mountRef.current.appendChild(renderer.domElement);
 
@@ -82,36 +67,18 @@ const ThreeDBarChart = ({ data, xAxis, yAxis }) => {
     controls.update();
 
     // Lighting
-<<<<<<< HEAD
     const ambientLight = new THREE.AmbientLight(0xffffff, isDark ? 1.1 : 0.7);
     scene.add(ambientLight);
     const dirLight = new THREE.DirectionalLight(0xffffff, isDark ? 1 : 0.7);
-=======
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-    scene.add(ambientLight);
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.7);
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
     dirLight.position.set(10, 20, 10);
     scene.add(dirLight);
 
     // Grid helper for orientation
-<<<<<<< HEAD
     const gridHelper = new THREE.GridHelper(30, 30, gridColor, gridColor2);
-=======
-    const gridHelper = new THREE.GridHelper(30, 30, 0xcccccc, 0xeeeeee);
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
     scene.add(gridHelper);
 
     // Axes
     const axesHelper = new THREE.AxesHelper(20);
-<<<<<<< HEAD
-    axesHelper.setColors(
-      new THREE.Color(isDark ? 0xff5555 : 0xff0000), // X
-      new THREE.Color(isDark ? 0x55ff55 : 0x00ff00), // Y
-      new THREE.Color(isDark ? 0x5555ff : 0x0000ff)  // Z
-    );
-=======
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
     scene.add(axesHelper);
 
     // Bars
@@ -130,20 +97,12 @@ const ThreeDBarChart = ({ data, xAxis, yAxis }) => {
     });
 
     // X axis label
-<<<<<<< HEAD
     const xLabel = createTextSprite(xAxis || "X", axisLabelColor, 48);
-=======
-    const xLabel = createTextSprite(xAxis || "X", "#4f8a8b", 48);
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
     xLabel.position.set((data.length * 1.5) / 2 + 1, 0, 0);
     scene.add(xLabel);
 
     // Y axis label
-<<<<<<< HEAD
     const yLabel = createTextSprite(yAxis || "Y", axisLabelColor, 48);
-=======
-    const yLabel = createTextSprite(yAxis || "Y", "#4f8a8b", 48);
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
     yLabel.position.set(0, Math.max(...data.map(d => d.value)) + 2, 0);
     scene.add(yLabel);
 
@@ -162,15 +121,12 @@ const ThreeDBarChart = ({ data, xAxis, yAxis }) => {
     };
   }, [data, xAxis, yAxis]);
 
-<<<<<<< HEAD
   // Set background for container as well
   const isDark =
     (typeof window !== "undefined" &&
       (localStorage.getItem("theme") === "dark" ||
         document.documentElement.classList.contains("dark")));
 
-=======
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
   return (
     <div
       ref={mountRef}
@@ -179,11 +135,7 @@ const ThreeDBarChart = ({ data, xAxis, yAxis }) => {
         maxWidth: "500px",
         height: "350px",
         margin: "0 auto",
-<<<<<<< HEAD
         background: isDark ? "#18181b" : "#f0f4f8",
-=======
-        background: "#f0f4f8",
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
         borderRadius: "1rem",
         boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
       }}
@@ -202,10 +154,6 @@ ThreeDBarChart.propTypes = {
   ).isRequired,
   xAxis: PropTypes.string,
   yAxis: PropTypes.string,
-<<<<<<< HEAD
-  zAxis: PropTypes.string,
-=======
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
 };
 
 export default ThreeDBarChart;

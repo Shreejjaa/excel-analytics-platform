@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import React, { useEffect, useState, useRef, useCallback } from "react";
-=======
-import React, { useEffect, useState, useRef } from "react";
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
 import {
   PieChart,
   Pie,
@@ -28,11 +24,8 @@ import { toPng } from "html-to-image";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import ThreeDScatterChart from "../components/ThreeDScatterChart";
-<<<<<<< HEAD
 import AISummary from "../components/AISummary";
 import axios from "axios";
-=======
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
 
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#8dd1e1", "#a4de6c"];
 
@@ -48,7 +41,6 @@ const Analyze = () => {
 
   const chartRef = useRef(null);
 
-<<<<<<< HEAD
   const formatChartData = useCallback((fileData, xField, yField) => {
     if (!fileData || fileData.length === 0) return;
     const formatted = fileData
@@ -77,12 +69,10 @@ const Analyze = () => {
     }
   };
 
-=======
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
   useEffect(() => {
     const token = localStorage.getItem("token");
     setLoading(true);
-    fetch("http://localhost:5000/api/excel/myuploads", {
+    fetch("/api/excel/myuploads", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -97,7 +87,6 @@ const Analyze = () => {
             setXAxis(keys[0]);
             setYAxis(keys[1]);
             formatChartData(sample, keys[0], keys[1]);
-<<<<<<< HEAD
             saveHistory({
               fileName: uploads[0].fileName,
               chartType: selectedChart,
@@ -105,30 +94,11 @@ const Analyze = () => {
               yAxis: keys[1],
               data: sample
             });
-=======
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
           }
         }
       })
       .finally(() => setLoading(false));
-<<<<<<< HEAD
   }, [formatChartData, selectedChart]);
-=======
-  }, []);
-
-  const formatChartData = (fileData, xField, yField) => {
-    if (!fileData || fileData.length === 0) return;
-    const formatted = fileData
-      .map((row) => ({
-        name: row[xField],
-        value: parseFloat(row[yField]) || 0,
-        x: parseFloat(row[xField]) || 0,
-        y: parseFloat(row[yField]) || 0,
-      }))
-      .slice(0, 10);
-    setChartData(formatted);
-  };
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
 
   const handleFileChange = (e) => {
     const index = parseInt(e.target.value);
@@ -139,7 +109,6 @@ const Analyze = () => {
     setXAxis(keys[0]);
     setYAxis(keys[1]);
     formatChartData(selected.data, keys[0], keys[1]);
-<<<<<<< HEAD
     saveHistory({
       fileName: selected.fileName,
       chartType: selectedChart,
@@ -147,8 +116,6 @@ const Analyze = () => {
       yAxis: keys[1],
       data: selected.data
     });
-=======
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
   };
 
   const renderChart = () => {
@@ -279,7 +246,6 @@ const Analyze = () => {
         yAxis,
       }),
     });
-<<<<<<< HEAD
     saveHistory({ fileName: uploads[selectedFileIndex].fileName, chartType: selectedChart, xAxis: xAxis, yAxis: yAxis, data: chartData });
   };
 
@@ -301,42 +267,11 @@ const Analyze = () => {
       link.href = dataUrl;
       link.click();
     });
-=======
-  };
-
-  // Download as PNG
-  const handleDownloadPNG = () => {
-    if (chartRef.current) {
-      toPng(chartRef.current)
-        .then((dataUrl) => {
-          const link = document.createElement("a");
-          link.download = "chart.png";
-          link.href = dataUrl;
-          link.click();
-        });
-    }
-  };
-
-  // Download as PDF
-  const handleDownloadPDF = () => {
-    if (chartRef.current) {
-      html2canvas(chartRef.current).then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jsPDF();
-        pdf.addImage(imgData, "PNG", 10, 10, 180, 100);
-        pdf.save("chart.pdf");
-      });
-    }
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
   };
 
   return (
     <Layout>
-<<<<<<< HEAD
       <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">📊 Analyze Uploaded Excel Data</h2>
-=======
-      <h2 className="text-2xl font-bold mb-4">📊 Analyze Uploaded Excel Data</h2>
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
       {loading ? (
         <Spinner />
       ) : uploads.length > 0 ? (
@@ -381,11 +316,7 @@ const Analyze = () => {
           </div>
 
           {/* Chart and download buttons */}
-<<<<<<< HEAD
           <div ref={chartRef} id="chart-container">
-=======
-          <div ref={chartRef}>
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
             {chartData.length === 0 ? (
               <div className="text-center text-gray-500 py-8">No data available for this chart.</div>
             ) : (
@@ -395,21 +326,13 @@ const Analyze = () => {
           <div className="flex gap-4 mt-4">
             <button
               className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-<<<<<<< HEAD
               onClick={downloadChartAsPng}
-=======
-              onClick={handleDownloadPNG}
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
             >
               Download Chart as PNG
             </button>
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-<<<<<<< HEAD
               onClick={downloadChartAsPDF}
-=======
-              onClick={handleDownloadPDF}
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
             >
               Download Chart as PDF
             </button>
@@ -419,7 +342,6 @@ const Analyze = () => {
           <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-4">
             <div>
               <span className="inline-block w-4 h-4 rounded mr-2" style={{ background: "#4f8a8b" }}></span>
-<<<<<<< HEAD
               <span className="text-gray-900 dark:text-gray-100">Bar Value</span>
             </div>
             <div className="overflow-x-auto w-full">
@@ -448,38 +370,20 @@ const Analyze = () => {
                   <tr>
                     <th className="px-2 py-1 border text-gray-900 dark:text-gray-100">{xAxis}</th>
                     <th className="px-2 py-1 border text-gray-900 dark:text-gray-100">{yAxis}</th>
-=======
-              <span>Bar Value</span>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="min-w-max text-sm">
-                <thead>
-                  <tr>
-                    <th className="px-2 py-1 border">{xAxis}</th>
-                    <th className="px-2 py-1 border">{yAxis}</th>
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
                   </tr>
                 </thead>
                 <tbody>
                   {chartData.map((item, i) => (
                     <tr key={i}>
-<<<<<<< HEAD
                       <td className="px-2 py-1 border text-gray-900 dark:text-gray-100">{item.name}</td>
                       <td className="px-2 py-1 border text-gray-900 dark:text-gray-100">{item.value}</td>
-=======
-                      <td className="px-2 py-1 border">{item.name}</td>
-                      <td className="px-2 py-1 border">{item.value}</td>
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           </div>
-<<<<<<< HEAD
           <AISummary analysis={uploads[selectedFileIndex]?.data} buttonClassName="text-gray-900 dark:text-gray-100" />
-=======
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
         </>
       ) : (
         <p>No uploads found. Please upload a file first.</p>

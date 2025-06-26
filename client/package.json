@@ -7,10 +7,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
-<<<<<<< HEAD
     "axios": "^1.10.0",
-=======
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
     "html-to-image": "^1.11.13",
     "html2canvas": "^1.4.1",
     "jspdf": "^3.0.1",
@@ -53,10 +50,6 @@
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.1"
-<<<<<<< HEAD
   },
   "proxy": "http://localhost:5000"
-=======
-  }
->>>>>>> 1f2f85abdac57e98016bbc1d4484a2b64a3b6e35
 }
